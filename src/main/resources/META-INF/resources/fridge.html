@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>My FRIDGE</title>
+    
+    <link rel="stylesheet" type="text/css" href="stilius.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/wingcss/0.1.8/wing.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
+    <!-- Load AngularJS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript">
+      var app = angular.module("FruitManagement", []);
+
+      //Controller Part
+      app.controller("FruitManagementController", function ($scope, $http) {
+
+        //Initialize page with default data which is blank in this example
+        $scope.juodas = ["CocoCola ", "Sokoladas", "Miltai ", "Cipsai", "Zelatinas"];
+        $scope.fruits = [];
+
+        $scope.form = {
+          pavadinimas: "",
+          Galiojimas: "",
+          kiekis:""
+        };
+
+        $scope.length = '';
+
+
+        //Now load the data from server
+        _refreshPageData();
+
+        //HTTP POST methods for add fruits
+        $scope.add = function () {
+          var data = { "pavadinimas": $scope.form.pavadinimas, "Galiojimas": $scope.form.Galiojimas , "kiekis": $scope.form.kiekis};
+
+          $http({
+            method: "POST",
+            url: '/fridge',
+            data: angular.toJson(data),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }).then(_success, _error);
+        };
+    
+
+        $scope.erase =  function () {
+          alert("Viskas Istrinama");
+
+          $http({
+            method: 'DELETE',
+            url: '/fridge/fridgeAll'
+          }).then(function successCallback(response) {
+            $scope.fruits = response.data;
+          }, function errorCallback(response) {
+            console.log(response.statusText);
+          });
+        }
+
+
+        $scope.erase1 =  function (index) {
+     
+     alert(index);
+
+          $http({
+            method: "DELETE",
+            url: '/fridge/fridgeOne/' + index
+          }).then(function successCallback(response) {
+            $scope.fruits = response.data;
+          alert("Produktas pasalintas sekmingai is saldytuvo");
+        
+          }, function errorCallback(response) {
+          alert("Error. while deleting user Try Again!");
+
+          });
+        }
+
+
+
+   
+        function _refreshPageData() {
+
+          
+
+          $http({
+            method: 'GET',
+            url: '/fridge'
+          }).then(function successCallback(response) {
+            $scope.fruits = response.data;
+          }, function errorCallback(response) {
+            console.log(response.statusText);
+          });
+        }
+
+
+        $scope.getLength  = function () {
+
+          $scope.length = $scope.fruits.length;
+          alert($scope.length);
+        }
+
+        $scope.getAkcijos  = function () {
+
+      
+          if (window.confirm('Ar norite buti perkeltas i akciju sarasas  ')) 
+          {
+              window.location.href='https://www.raskakcija.lt/';
+          };
+        }
+
+     
+        $scope.Sarasas  = function () {
+       alert("JUODASIS SARASAS" + "\r" + $scope.juodas);
+        }
+
+
+
+        function _success(response) {
+          _refreshPageData();
+          _clearForm();
+        }
+
+        function _error(response) {
+          alert(response.data.message || response.statusText);
+        }
+
+        //Clear the form
+        function _clearForm() {
+          $scope.form.pavadinimas = "";
+          $scope.form.Galiojimas = "";
+          $scope.form.kiekis = "";
+        }
+
+        $scope.save = function() {
+              alert("Data patvirtinta");
+      }   
+
+      });
+    </script>
+</head>
+
+<body ng-app="FruitManagement" ng-controller="FruitManagementController">
+
+<div class="container">
+<div class="Nav"> <h1>Mano Šaldituvas</h1>
+</div>
+ 
+    <h3>Pridekite produkta</h3>
+    <form ng-submit="add()">
+        <div class="row">
+
+            <div class="col-4"><input type="text" placeholder="pavadinimas" ng-model="form.pavadinimas" size="60"/></div>
+        
+            <div class="col-4"><input type="text" placeholder="Kiekis" ng-model="form.kiekis" size="60"/></div>
+
+            <div class="col-4"><input type="text" placeholder="Data" ng-model="form.Galiojimas" size="60"/></div>
+        </div>
+        <input type="submit" value="Issaugoti"/ >
+
+       
+    </form>
+ <button ng-click="erase()" style="background-color: red;">Istrinti viska</button>
+ <button ng-click="getLength()" style="background-color:rgb(109, 158, 36);">Produktu skaicius saldytuve yra {{length}}</button>
+ <button ng-click="getAkcijos()" style="background-color:rgb(197, 8, 188);">Sios savaites akcijos parduotuvese</button>
+ <button ng-click="Sarasas()" style="background-color:black;">Juodasis sarasas</button>
+
+
+
+ <form >
+   <label for="last">Paskutinis vizitas parduotuveje:</label>
+   <input type="date" id="last" name="last">
+   <button ng-click = "save()">Issaugoti</button>
+ </form>
+
+
+ <div>  <h3 style="color: lightseagreen;"> Produktu skaicius saldytuve   {{length}} </h3>
+<p style="color: rgb(18, 15, 221);">  Siandienos kaloriju limitas 2300KCAL </p> 
+</div>
+
+
+    <h3>Turimi produktai </h3>
+    <div class="row">
+        <div class="col-3">Pavadinimas</div>
+        <div class="col-3">Kiekis</div>
+        <div class="col-3">Galiojimo data</div>
+        <div class="col-3">Pasalinti</div>
+    </div>
+    <div class="row" ng-repeat="fruit in fruits">
+        <div class="col-3">{{ fruit.pavadinimas }}</div>
+        <div class="col-3">{{ fruit.kiekis }}</div>
+        <div class="col-3">{{ fruit.Galiojimas}}</div>
+        <div class="col-3"><button ng-click="erase1($index)" style="background-color: blue;">Delete</button> </div>
+    </div>
+
+
+      
+<p class="versija"> Javainis V.01</p>
+<i style="color: blue;" class="fab fa-facebook fa-3x"></i>
+<i  style="color: red;" class="fas fa-mail-bulk fa-3x"></i>
+<i  style="color: grey" class="fab fa-linkedin fa-3x"></i>
+</div>
+
+</body>
+</html>
