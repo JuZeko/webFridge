@@ -81,8 +81,9 @@ public class FridgeResource {
 
     @Path("/test")
     @GET
-    public Integer Test() {
-        return str.size();
+    public String Test() {
+        
+        return "Test";
     }
 
 
