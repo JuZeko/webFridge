@@ -25,25 +25,25 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 
-public class FruitResource {
+public class FridgeResource {
 
   
     
 
 
-    private ArrayList<Fruit> str = new ArrayList<Fruit>();
+    private ArrayList<Fridge> str = new ArrayList<Fridge>();
    
 
-    public FruitResource() {
-        str.add(new Fruit("Apple", "2020:05:15",10));
+    public FridgeResource() {
+        str.add(new Fridge("Apple", "2020:05:15",10));
        
-        str.add(new Fruit("Pineapple", "2020:05:15",10));
+        str.add(new Fridge("Pineapple", "2020:05:15",10));
 
-        str.add(new Fruit("Pizza", "2020:05:15",10));
+        str.add(new Fridge("Pizza", "2020:05:15",10));
     }
 
     @GET
-    public ArrayList<Fruit> list() {
+    public ArrayList<Fridge> list() {
         
         System.out.println("GET");
         return str;
@@ -52,14 +52,14 @@ public class FruitResource {
 
 
     @POST
-    public ArrayList<Fruit> add(Fruit fruit) {
-        str.add(fruit);
+    public ArrayList<Fridge> add(Fridge fridge) {
+        str.add(fridge);
         return str;
     }
 
     @Path("/fridgeAll")
     @DELETE
-    public ArrayList<Fruit> delete() {
+    public ArrayList<Fridge> delete() {
         System.out.println("DELETE");
         str.removeAll(str);
 
@@ -68,10 +68,10 @@ public class FruitResource {
 
     @Path("/fridgeOne/{numeris}")
     @DELETE
-    public ArrayList<Fruit> delete1(@PathParam Integer numeris) {
+    public ArrayList<Fridge> delete1(@PathParam Integer numeris) {
         
         int nr = Integer.parseInt(numeris.toString());
-
+        
        str.remove(nr);
         
         return str;
@@ -80,10 +80,9 @@ public class FruitResource {
 
 
     @Path("/test")
-    @POST
-    public ArrayList<Fruit> Test(String word) {
-        System.out.println(word);
-        return str;
+    @GET
+    public Integer Test() {
+        return str.size();
     }
 
 

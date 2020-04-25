@@ -1,17 +1,21 @@
 package org.acme.rest.json;
 
-public class Fruit {
+public class Fridge {
 
     public String pavadinimas;
     public String Galiojimas;
     public int kiekis;
 
-    public Fruit() {
+    public Fridge() {
     }
 
-    public Fruit(String pavadinimas, String Galiojimas, Integer kiekis) {
+    public Fridge(String pavadinimas, String Galiojimas, Integer kiekis) {
         this.pavadinimas = pavadinimas;
         this.Galiojimas = Galiojimas;
         this.kiekis = kiekis;
     }
+
+	public int length() {
+		return 0;
+	}
 }

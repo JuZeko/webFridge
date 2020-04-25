@@ -13,12 +13,12 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 
 @RegisterRestClient
-public interface FruitService {
+public interface FridgeService {
 
     @GET
-    @Path("/fruits")
+    @Path("/fridge")
     @Produces("application/json")
-    Set<Fruit> getByName(@PathParam String name);
+    Set<Fridge> getByName(@PathParam String name);
 
 
 }
